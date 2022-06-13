@@ -11,6 +11,10 @@ const newBook = new mongoose.Schema( {
         type: ObjectId,
         ref: "Publisher"
     },
+    isHardCover:{
+        type : Boolean,
+        default:false
+    },
     price: Number,
     ratings: Number
 

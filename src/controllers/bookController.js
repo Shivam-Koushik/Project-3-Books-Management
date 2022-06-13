@@ -44,8 +44,21 @@ const getBooksWithPublisharAndAuthorDetails = async function (req, res) {
     res.send({ data: specificBook })
 }
 
+const updateBooleanKey = async function (req, res) {
+    let publisherId = await publisherModel.find({ name: "Penguin" }).select("_id")
+    let book = await bookModel.find({ publisher_id: publisherId }).update({ $set: { isHardCover: true } })
+    res.send({ data:book })
+}
+const updatePrice= async function (req, res) {
+    let authorId = await authorModel.find({ rating:{$gt:3.5} }).select({_id:1})
+    let book = await bookModel.updateMany({ author_id:authorId }, { $inc: { price:10 } },{new:true})
+    res.send({ data:book })
+}
+
 module.exports.createBook = createBook
 module.exports.getBooksData = getBooksData
 module.exports.getBooksWithAuthorDetails = getBooksWithAuthorDetails
 module.exports.getBooksWithPublisharDetails = getBooksWithPublisharDetails
 module.exports.getBooksWithPublisharAndAuthorDetails = getBooksWithPublisharAndAuthorDetails
+module.exports.updateBooleanKey = updateBooleanKey
+module.exports.updatePrice = updatePrice
