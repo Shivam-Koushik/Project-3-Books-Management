@@ -47,7 +47,6 @@ const filterBlogs = async function (req, res) {
             if (allBlog.length == 0) return res.status(400).send({ status: "false", msg: "Blog Not Found" })
             return res.status(200).send({ status: true, msg: allBlog })
         }
-        if (query.authorId.length != 24) return res.status(400).send({ status: "false", msg: "Provide valid formate" })
         let getAllBlog = await blogModel.find({ $and: [{ isDeleted: false }, { isPublished: true }], $or: [query] })
 
         if (getAllBlog.length == 0) return res.status(400).send({ status: "false", msg: "Blog Not Found" })
@@ -75,7 +74,7 @@ const updateBlog = async function (req, res) {
         if (data.subCategory) data.subCategory.push(...user.subCategory)
         data[`isPublished`] = true
         data[`publishedAt`] = new Date();
-
+    
         let newData = await blogModel.findByIdAndUpdate({ _id: id }, data, { new: true })
         return res.status(200).send({ status: true, msg: newData })
     } catch (err) {
