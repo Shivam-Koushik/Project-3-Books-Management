@@ -1,8 +1,10 @@
 
 const isValid = function (x) {
+    let strRegex = /^\w[A-Za-z\s]{1,}[\.]{0,1}[A-Za-z\s]{0,}$/
     if (typeof x === 'undefined' || x === null) return false
     if( typeof x != "string")  return false
     if (typeof x === 'string' && x.trim().length === 0) return false
+    if(!strRegex.test(x)) return false
     return true
 }
 
@@ -17,11 +19,16 @@ const isValidEmail = function (y) {
 }
 
 const isValidMobile = function (y) {   
-   let mobileRegex = /^(?:(?:\+|0{0,2})91(\s*[\-]\s*)?|[0]?)?[0-9]\d{9}$/
+   let mobileRegex = /^([+]\d{2})?\d{10}$/
    if (mobileRegex.test(y)) return true
+}
+const isValidPassword = function (y) {   
+    let passwordRegex = /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&-]*).{8,15}$/
+   if (passwordRegex.test(y)) return true
 }
 
 module.exports.isValidBody = isValidBody
 module.exports.isValid = isValid
 module.exports.isValidEmail = isValidEmail
 module.exports.isValidMobile = isValidMobile
+module.exports.isValidPassword = isValidPassword
