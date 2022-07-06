@@ -29,7 +29,7 @@ const register = async function (req, res) {
 
     if (!password) return res.status(400).send({ status: false, message: "Please enter password" })
     if (!Validator.isValidPassword(password)) return res.status(400).send({ status: false, message: "Use strong password ,  At least one upper case letter , lower case , number and  (min length Eight and max length Fifteen)" })
-    if (!Validator.isValidPassword(password)) return res.status(400).send({ status: false, message: "Use strong password ,  At least one upper case letter , lower case , number and special character , min length Eight and max length Fifteen" })
+    // if (!Validator.isValidPassword(password)) return res.status(400).send({ status: false, message: "Use strong password ,  At least one upper case letter , lower case , number and special character , min length Eight and max length Fifteen" })
 
     if(address){
       if(!Validator.isValidBody(address)) return res.status(400).send({ status: false, message: "Provide your address" })
