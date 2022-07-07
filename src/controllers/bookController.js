@@ -74,5 +74,42 @@ const getBooks = async function (req, res) {
   }
 }
 
+
+
+const getBooksByBookId = async function (req, res) {
+  try {
+
+
+  } catch (err) {
+    return res.status(500).send({ status: false, msg: err.message })
+  }
+}
+
+
+
+const updateBooksByBookId = async function (req, res) {
+  try {
+
+
+  } catch (err) {
+    return res.status(500).send({ status: false, msg: err.message })
+  }
+}
+
+
+
+const deleteBooksByBookId = async function (req, res) {
+  try {
+
+
+  } catch (err) {
+    return res.status(500).send({ status: false, msg: err.message })
+  }
+}
+
+
 module.exports.postBooks = postBooks
 module.exports.getBooks = getBooks
+module.exports.getBooksByBookId = getBooksByBookId
+module.exports.updateBooksByBookId = updateBooksByBookId
+module.exports.deleteBooksByBookId = deleteBooksByBookId
