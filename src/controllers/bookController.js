@@ -24,7 +24,7 @@ const postBooks = async function (req, res) {
     if (!ObjectId.isValid(userId)) return res.status(400).send({ status: false, message: "please enter valid userId" })
 
     if (!ISBN) return res.status(400).send({ status: false, message: "please enter ISBN" })
-    if (ISBN.length !== 13 ) return res.status(400).send({ status: false, message: "Provide valid ISBN" })
+    if (ISBN.length !== 13) return res.status(400).send({ status: false, message: "Provide valid ISBN" })
     const dupISBN = await bookModel.findOne({ ISBN: ISBN }) // <=====checking duplicate value
     if (dupISBN) return res.status(400).send({ status: false, message: "ISBN already exist" })
 
@@ -115,14 +115,14 @@ const updateBooksByBookId = async function (req, res) {
     let bookId = req.params.bookId;
     if (!Validator.isValidBody(data)) return res.status(400).send({ status: false, message: "Please enter details" })
 
-    const { title, excerpt, releasedAt, ISBN} = data
+    const { title, excerpt, releasedAt, ISBN } = data
 
     if (!Validator.isValid(title)) return res.status(400).send({ status: false, message: "Provide valid title" })
     const duptitle = await bookModel.findOne({ title: title })
     if (duptitle) { return res.status(400).send({ status: false, message: "this title is already in use" }) }
-    
-    if(excerpt) {
-    if (!Validator.isValid(excerpt)) return res.status(400).send({ status: false, message: "Provide valid excerpt" })
+
+    if (excerpt) {
+      if (!Validator.isValid(excerpt)) return res.status(400).send({ status: false, message: "Provide valid excerpt" })
     }
 
     if (ISBN.length !== 13) return res.status(400).send({ status: false, message: "Provide valid ISBN" })
@@ -133,7 +133,7 @@ const updateBooksByBookId = async function (req, res) {
 
 
     const updatedBlog = await bookModel.findOneAndUpdate({ _id: bookId, isDeleted: false },
-      { title: title, excerpt: excerpt, releasedAt: releasedAt, ISBN: ISBN } , { new: true });
+      { title: title, excerpt: excerpt, releasedAt: releasedAt, ISBN: ISBN }, { new: true });
 
     // const afterUpdate = updatedBlog ?? "BLog not found"
     res.status(200).send({ status: true, message: "success", data: updatedBlog })
@@ -149,18 +149,20 @@ const deleteBooksByBookId = async function (req, res) {
   try {
     let BookId = req.params.bookId
     let date = new Date()
-    let Book = await bookModel.findById(BookId)
-
     // WHEN WE PROVIDE WRONG ID
-    const isValidObjectId = mongoose.Types.ObjectId.isValid(Book)
-    if(!isValidObjectId) { return res.status(400).send({ status: false, msg: "Book Not Exist In DB" }) }
+    const isValidObjectId = mongoose.Types.ObjectId.isValid(BookId)
+    if (!isValidObjectId) { return res.status(400).send({ status: false, msg: "Book Not Exist In DB" }) }
+
+    let Book = await bookModel.findById(BookId)
+    // if (!Book) { return res.status(400).send({ status: false, message: "fill the book ID" }) }
+
 
     let check = await bookModel.findOneAndUpdate(
       { _id: BookId }, { $set: { isDeleted: true, deletedAt: date } }, { new: true })
 
     //IF THE BOOK IS ALREADY DELETED  
-    const alreadyDeleted = await bookModel.findOne({isDeleted:true}) 
-    if(alreadyDeleted) { return res.status(400).send({ status: false, msg: "ALREADY DELETED" }) }
+    const alreadyDeleted = await bookModel.findOne({ isDeleted: true })
+    if (alreadyDeleted) { return res.status(400).send({ status: false, msg: "ALREADY DELETED" }) }
 
     return res.status(200).send({ status: true, msg: " BOOK IS DELETED ", data: check })
   }
