@@ -1,7 +1,6 @@
 const bookModel = require("../models/bookModel")
 const ObjectId = require('mongoose').Types.ObjectId;
 const Validator = require("../Validator/validation")
-const moment = require("moment")
 const userModel = require("../models/userModel.js")
 
 // ========> create books
@@ -40,15 +39,8 @@ const postBooks = async function (req, res) {
     }
 
     if (!releasedAt) return res.status(400).send({ status: false, message: "please enter date of release" })
-
-    // // releasedAt = moment(releasedAt).format("YYYY-MM-DD")
-    // let isValidDateFormat = function (date) {
-    //   let dateFormatRegex = /((?:19|20)\\d\\d)-(0?[1-9]|1[012])-([12][0-9]|3[01]|0?[1-9])/
-
-    //   return dateFormatRegex.test(data)
-
-    // }
-    // if (!isValidDateFormat(releasedAt)) return res.status(400).send({ status: false, message: " wrong date format" })
+    let dateFormatRegex = /^([0-9]{4}[-/]?((0[13-9]|1[012])[-/]?(0[1-9]|[12][0-9]|30)|(0[13578]|1[02])[-/]?31|02[-/]?(0[1-9]|1[0-9]|2[0-8]))|([0-9]{2}(([2468][048]|[02468][48])|[13579][26])|([13579][26]|[02468][048]|0[0-9]|1[0-6])00)[-/]?02[-/]?29)$/
+    if (!dateFormatRegex.test(releasedAt)) return res.status(400).send({ status: false, message: " wrong date format" })
 
     const savedData = await bookModel.create(data)
     return res.status(201).send({ status: true, message: "success", data: savedData })
@@ -59,32 +51,22 @@ const postBooks = async function (req, res) {
   }
 }
 
-// =========> get books
+// ==========> get books 
 const getBooks = async function (req, res) {
   try {
-    let doc = req.query
 
-    if (doc.userId) {
-      let id = doc.userId
-      let user = await userModel.findById(id)
-      if (!user) { return res.status(400).send({ status: false, msg: "No book of such user" }) }
-    }
-    if (doc.category) {
-      const category = doc.category
-      const book = await bookModel.find({ category: category })
-      if (!book) { return res.status(400).send({ status: false, msg: "No book of this category" }) }
-    }
-    if (doc.subCategory) {
-      const subcategory = doc.subCategory
-      const book = await bookModel.find({ subcategory: subcategory })
-      if (!book) { return res.status(400).send({ status: false, msg: "No book related to this sub-category" }) }
-    }
+    let query = req.query
 
-    let Book = await bookModel.find(doc).select({ _id: 1, title: 1, excerpt: 1, userId: 1, category: 1, releasedAt: 1, reviews: 1 })
-    Book.filter(x => x.isDeleted === false)
-    if (!Book || Book.length == 0) { res.status(400).send({ status: false, msg: "No such book exist" }) }
-    return res.status(200).send({ status: true, message:'Books list' , data: Book})
+    if (!query) {
+      let allBook = await bookModel.find({ isDeleted: false }).sort("title")
+      if (allBook.length == 0) return res.status(400).send({ status: false, message: "Book Not Found" })
+      return res.status(200).send({ status: true, message: "Books List", data: allBook })
+    }
+    let getAllBook = await bookModel.find({ $or: [query] }).sort("title")
 
+    if (getAllBook.length == 0) return res.status(400).send({ status: false, message: "Book Not Found" })
+
+    return res.status(200).send({ status: true, message: "Books List", data: getAllBook })
 
   } catch (err) {
     return res.status(500).send({ status: false, msg: err.message })

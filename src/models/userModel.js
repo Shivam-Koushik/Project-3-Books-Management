@@ -9,9 +9,9 @@ const userSchema = new mongoose.Schema({
   address:
   {
     type: Object,
-    street: { type: String },
-    city: { type: String },
-    pincode: { type: String }
+    street: { type: String ,trim:true},
+    city: { type: String ,trim:true},
+    pincode: { type: String ,trim:true}
   }
 }, { timestamps: true });
 

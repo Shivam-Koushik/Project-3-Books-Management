@@ -1,4 +1,4 @@
-const { validate } = require("../models/userModel")
+// const { validate } = require("../models/userModel")
 const userModel = require("../models/userModel")
 const Validator = require("../Validator/validation")
 const jwt = require("jsonwebtoken")
@@ -16,7 +16,7 @@ const register = async function (req, res) {
 
     if (!title) return res.status(400).send({ status: false, message: "Please enter title" })
     if (!Validator.isValid(title)) return res.status(400).send({ status: false, message: "Provide valid title" })
-    if (!title === ["Mr" || "Miss" || "Mrs"]) return res.status(400).send({ status: false, message: "Provide enter Mr, Miss , Mrs only" })
+    if (title != ("Mr" || "Mrs" || "Miss")) return res.status(400).send({ status: false, message: "Provide enter Mr, Mrs, Miss only" })
 
     if (!name) return res.status(400).send({ status: false, message: "Please enter name" })
     if (!Validator.isValid(name)) return res.status(400).send({ status: false, message: "Provide valid name" })
@@ -32,8 +32,8 @@ const register = async function (req, res) {
     if (Email) return res.status(400).send({ status: false, message: "email already exist" })
 
     if (!password) return res.status(400).send({ status: false, message: "Please enter password" })
-    if (!Validator.isValidPassword(password)) return res.status(400).send({ status: false, message: "Use strong password ,  At least one upper case letter , lower case , number and special character , min length Eight and max length Fifteen" })
-
+    if (!Validator.isValidPassword(password)) return res.status(400).send({ status: false, message: "Use strong password ,  At least one upper case letter , lower case , number and  (min length Eight and max length Fifteen)" })
+   
     if(address){
       if(!Validator.isValidBody(address)) return res.status(400).send({ status: false, message: "Provide your address" })
       if(!Validator.isValid(address.street)) return res.status(400).send({ status: false, message: "Provide valid street" })
