@@ -3,11 +3,15 @@ const userModel = require("../models/userModel")
 const Validator = require("../Validator/validation")
 const jwt = require("jsonwebtoken")
 
-
+// ===============> create user api 
 const register = async function (req, res) {
   try {
     let data = req.body
+
+    // destructing data here
     const { title, name, phone, email, password, address } = data
+
+    // if the body is empty
     if (!Validator.isValidBody(data)) return res.status(400).send({ status: false, message: "Please enter details" })
 
     if (!title) return res.status(400).send({ status: false, message: "Please enter title" })
@@ -19,12 +23,12 @@ const register = async function (req, res) {
 
     if (!phone) return res.status(400).send({ status: false, message: "Please enter phone" })
     if (!Validator.isValidMobile(phone)) return res.status(400).send({ status: false, message: "Provide valid phone" })
-    const mobile = await userModel.findOne({ phone: phone })
+    const mobile = await userModel.findOne({ phone: phone })  // <=====checking duplicate value
     if (mobile) return res.status(400).send({ status: false, message: "Phone number already exist" })
 
     if (!email) return res.status(400).send({ status: false, message: "Please enter email" })
     if (!Validator.isValidEmail(email)) return res.status(400).send({ status: false, message: "Provide valid email" })
-    const Email = await userModel.findOne({ email: email })
+    const Email = await userModel.findOne({ email: email }) // <=====checking duplicate value
     if (Email) return res.status(400).send({ status: false, message: "email already exist" })
 
     if (!password) return res.status(400).send({ status: false, message: "Please enter password" })
@@ -46,9 +50,7 @@ const register = async function (req, res) {
   }
 }
 
-
-
-
+// ==========> login api
 const login = async function (req, res) {
   try {
     let data = req.body
@@ -86,4 +88,3 @@ const login = async function (req, res) {
 
 module.exports.login = login
 module.exports.register = register
-
