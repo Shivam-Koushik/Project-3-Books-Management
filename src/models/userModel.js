@@ -8,7 +8,7 @@ const userSchema = new mongoose.Schema( {
     password: {type: String, required:true},
     address: { type:Object,
       street: {type:String},
-      city: {tyoe:String},
+      city: {type:String},
       pincode: {type: String}
     }
 }, { timestamps: true });
