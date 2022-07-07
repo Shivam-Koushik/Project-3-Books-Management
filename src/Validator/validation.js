@@ -7,10 +7,6 @@ const isValid = function (x) {
     return true
 }
 
-// isValid.ObjectId = function(w) {
-//     let ObjectId.isValid(w)
-// }
-
 const isValidBody = function (y) {
     return Object.keys(y).length > 0
 }
@@ -25,7 +21,6 @@ const isValidMobile = function (y) {
    let mobileRegex = /^([+]\d{2})?\d{10}$/
    if (mobileRegex.test(y)) return true
 }
-
 
 const isValidPassword = function (y) {   
     let passwordRegex = /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&-]*).{8,15}$/
