@@ -1,3 +1,10 @@
+const mongoose = require('mongoose');
+
+// const isValidObjectId = function(x){
+//     mongoose.Types.ObjectId.isValid(x);
+// }
+
+
 const isValid = function (x) {
     let strRegex = /^\w[A-Za-z\s]{1,}[\.]{0,1}[A-Za-z\s]{0,}$/
     if (typeof x === 'undefined' || x === null) return false
@@ -29,6 +36,7 @@ const isValidPassword = function (y) {
    if (passwordRegex.test(y)) return true
 }
 
+// module.exports.isValidObjectId = isValidObjectId
 module.exports.isValidBody = isValidBody
 module.exports.isValid = isValid
 module.exports.isValidEmail = isValidEmail

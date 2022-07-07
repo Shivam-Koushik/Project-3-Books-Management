@@ -2,7 +2,9 @@ const bookModel = require("../models/bookModel")
 const ObjectId = require('mongoose').Types.ObjectId;
 const Validator = require("../Validator/validation")
 
-const userModel = require("../models/userModel.js")
+const userModel = require("../models/userModel.js");
+const { validate } = require("../models/userModel.js");
+const { default: mongoose } = require("mongoose");
 const postBooks = async function (req, res) {
   try {
     let data = req.body
@@ -66,23 +68,26 @@ const getBooks = async function (req, res) {
 
     if (query.userId) {
       let id = query.userId
+      let isValid = mongoose.Types.ObjectId.isValid(id)
+      if (!isValid) return res.status(400).send({ status: false, message: "userId is not valid" })
+      // if(!Validator.isValidObjectId(id)) return res.status(400).send({ status: false, message: "userId is not valid" })
       let user = await userModel.findById(id)
-      if (!user) { return res.status(400).send({ status: false, msg: "No book of such user" }) }
+      if (!user) { return res.status(400).send({status: false, message: "No book of such user" }) }
     }
 
     if (query.category) {
       const category = query.category
-      const book = await bookModel.find( {category: category} )
-      if (!book) { return res.status(400).send({ status: false, msg: "No book related to this category" }) }
+      const book = await bookModel.find({ category: category })
+      if (book.length == 0) { return res.status(400).send({status: false, message: "No book related to this category" }) }
     }
 
     if (query.subcategory) {
-      const subcategory = query.subCategory
+      const subcategory = query.subcategory
       const book = await bookModel.find({ subcategory: subcategory })
-      if (!book) { return res.status(400).send({ status: false, msg: "No book related to this sub-category" }) }
+      if (book.length == 0) { return res.status(400).send({status: false, message: "No book related to this sub-category" }) }
     }
 
-    let getAllBook = await bookModel.find(query).select({_id:1, title:1, excerpt:1, userId:1, category:1, releasedAt:1, reviews:1}).sort("title")
+    let getAllBook = await bookModel.find(query).select({ _id: 1, title: 1, excerpt: 1, userId: 1, category: 1, releasedAt: 1, reviews: 1 }).sort("title")
 
     if (getAllBook.length == 0) return res.status(400).send({ status: false, message: "Book Not Found" })
 
