@@ -1,9 +1,6 @@
 const jwt = require("jsonwebtoken");
 const bookModel = require("../models/bookModel")
-const mongoose = require('mongoose');
-// const userModel = require("../models/userModel");
-// const Validator = require("../Validator/validation");
-
+const Validator = require("../Validator/validation")
 
 const Authenticate = function (req, res, next) {
     try {
@@ -26,18 +23,17 @@ const Authorisation = async function (req, res, next) {
         let bookId = req.params.bookId
         if (bookId) {
             // book update or delete 
-            let isValid = mongoose.Types.ObjectId.isValid(bookId)
-            if (!isValid) return res.status(400).send({ status: false, message: "bookId is not valid" })
+            if(!Validator.isValidObjectId(bookId)) return res.status(400).send({ status: false, message: "bookId is not valid" })
             let userId = await bookModel.findOne({ _id: bookId }).select({ userId: 1, _id: 0 })
             if(!userId) return res.status(400).send({ status: false, msg: 'Please enter valid book ID' })
-            let newAuth = userId.userId.valueOf()
+            let newAuth = userId.userId
             if (newAuth != userLoggedIn) return res.status(403).send({ status: false, msg: 'User logged is not allowed to modify the requested users data' })
         }
         else {
             // book creation
             let requestUser = req.body.userId
-            let isValid = mongoose.Types.ObjectId.isValid(requestUser)
-            if (!isValid) return res.status(400).send({ status: false, message: "bookId is not valid" })
+            if(!requestUser)  return res.status(400).send({ status: false, message: "Please enter userId" })
+            if(!Validator.isValidObjectId(requestUser)) return res.status(400).send({ status: false, message: "userId is not valid" })
             if (requestUser != userLoggedIn) return res.status(403).send({ status: false, msg: 'User logged is not allowed to modify the requested users data' })
         }
         next()

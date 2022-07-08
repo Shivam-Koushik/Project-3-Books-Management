@@ -1,8 +1,8 @@
+const mongoose = require('mongoose');
 
-// const isValidObjectId = function(x){
-//   return  mongoose.Types.ObjectId.isValid(x); 
-// }
-
+const isValidObjectId = function(x){
+  return  mongoose.Types.ObjectId.isValid(x); 
+}
 
 const isValid = function (x) {
     let strRegex = /^\w[A-Za-z\s]{1,}[\.]{0,1}[A-Za-z\s]{0,}$/
@@ -38,7 +38,7 @@ const isValidDate = function (y) {
    if (dateRegex.test(y)) return true
 }
 
-// module.exports.isValidObjectId = isValidObjectId
+module.exports.isValidObjectId = isValidObjectId
 module.exports.isValidBody = isValidBody
 module.exports.isValid = isValid
 module.exports.isValidEmail = isValidEmail
