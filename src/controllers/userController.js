@@ -46,7 +46,7 @@ const register = async function (req, res) {
     return res.status(201).send({ status: true, message: 'Success', data: saveData })
 
   } catch (err) {
-    return res.status(500).send({ status: false, msg: err.message })
+    return res.status(500).send({ status: false, message: err.message })
   }
 }
 
@@ -73,7 +73,7 @@ const login = async function (req, res) {
       email: user.email,
       password: user.password
     },
-      "project_3", { expiresIn: '24h' }
+      "project_3", { expiresIn:'24h' }
     );
 
     res.status(200).setHeader("x-api-key", token);
@@ -81,10 +81,10 @@ const login = async function (req, res) {
 
   }
   catch (err) {
-    return res.status(500).send({ status: false, msg: err.message })
+    return res.status(500).send({ status: false, message: err.message })
   }
 }
 
 
 module.exports.login = login
-module.exports.register = register
+module.exports.register = register  

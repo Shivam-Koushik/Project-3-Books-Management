@@ -89,7 +89,7 @@ const getBooks = async function (req, res) {
     return res.status(200).send({ status: true, message: "Books List", data: getAllBook })
 
   } catch (err) {
-    return res.status(500).send({ status: false, msg: err.message })
+    return res.status(500).send({status: false, message: err.message })
   }
 }
 
@@ -106,11 +106,9 @@ const getBooksByBookId = async function (req, res) {
     }
     const reviews = await reviewModel.find({ bookId: query })
     book.reviewsData = reviews
-    // book[`reviewsData`] = reviews
-    console.log(book)
     res.status(200).send({ status: true, message: 'Books list', data: book })
   } catch (err) {
-    return res.status(500).send({ status: false, msg: err.message })
+    return res.status(500).send({ status: false, message: err.message })
   }
 }
 
@@ -147,11 +145,10 @@ const updateBooksByBookId = async function (req, res) {
     const updatedBlog = await bookModel.findOneAndUpdate({ _id: bookId, isDeleted: false },
       { title: title, excerpt: excerpt, releasedAt: releasedAt, ISBN: ISBN }, { new: true });
 
-    // const afterUpdate = updatedBlog ?? "BLog not found"
     res.status(200).send({ status: true, message: "success", data: updatedBlog })
 
   } catch (err) {
-    return res.status(500).send({ status: false, msg: err.message })
+    return res.status(500).send({status: false, message: err.message })
   }
 }
 
