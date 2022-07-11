@@ -4,6 +4,15 @@ const isValidObjectId = function(x){
   return  mongoose.Types.ObjectId.isValid(x); 
 }
 
+
+// const isValid = function (value) {
+//     if (typeof value === "undefined" || value === null) return false
+//     if (typeof value === "string" && value.trim().length === 0) return false
+//     if (typeof value === Number && value.trim().length === 0) return false
+//     return true
+// }
+
+
 const isValid = function (x) {
     let strRegex = /^\w[A-Za-z\s]{1,}[\.]{0,1}[A-Za-z\s]{0,}$/
     if (typeof x === 'undefined' || x === null) return false
