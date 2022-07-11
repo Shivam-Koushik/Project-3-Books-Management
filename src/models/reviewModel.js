@@ -23,7 +23,9 @@ const reviewSchema = new mongoose.Schema({
     isDeleted: {
         type: Boolean,
         default: false
-    }
+    },
+    reviewedAt:{type:Date,
+    mandatory:true}
 
 }, { timestamps: true })
 

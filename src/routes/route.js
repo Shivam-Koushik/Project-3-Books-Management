@@ -12,8 +12,8 @@ router.get('/books',middleware.Authenticate,bookController.getBooks)
 router.get('/books/:bookId',middleware.Authenticate,bookController.getBooksByBookId)
 router.put('/books/:bookId',middleware.Authenticate,middleware.Authorisation,bookController.updateBooksByBookId)
 router.delete('/books/:bookId',middleware.Authenticate,middleware.Authorisation, bookController.deleteBooksByBookId)
-router.post('/books/:bookId/review',middleware.Authenticate,middleware.Authorisation, reviewController.createReview)
-router.put('/books/:bookId/review/:reviewId',middleware.Authenticate,middleware.Authorisation, reviewController.updateReview)
-router.delete('/books/:bookId/review/:reviewId',middleware.Authenticate,middleware.Authorisation, reviewController.deleteReview)
+router.post('/books/:bookId/review',middleware.Authenticate, reviewController.createReview)
+router.put('/books/:bookId/review/:reviewId',middleware.Authenticate, reviewController.updateReview)
+router.delete('/books/:bookId/review/:reviewId', reviewController.deleteReview)
 
 module.exports = router;
