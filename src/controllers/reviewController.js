@@ -63,7 +63,7 @@ const updateReview = async function (req, res) {
     const { review, rating, reviewedBy } = data
 
     let bookId = req.params.bookId
-    if (!Validator.isValidObjectId(bookId)) return res.status(400).send({ status: false, message: "userId is not valid" })
+    if (!Validator.isValidObjectId(bookId)) return res.status(400).send({ status: false, message: "bookId is not valid" })
 
     let eBook = await bookModel.findOne({ _id: bookId, isDeleted: false })
     if (!eBook) { return res.status(404).send({ status: false, message: "book doesn't exist" }) }
@@ -78,11 +78,11 @@ const updateReview = async function (req, res) {
     }
 
     if (rating) {
-      if (!/[0-5]/.test(body.rating)) { return res.status(400).send({ status: false, message: "use numbers only for rating" }) }
+      if (!/[0-5]/.test(body.rating)) { return res.status(400).send({ status: false, message: "use numbers only for rating (0-5)" }) }
     }
 
     if (reviewedBy) {
-      if (!Validator.isValid(reviewedBy)) { return res.status(400).send({ status: false, message: "enter something in reviewedBy" }) }
+      if (!Validator.isValid(reviewedBy)) { return res.status(400).send({ status: false, message: "enter valid something in reviewedBy" }) }
     }
 
     const reviewsData = await reviewModel.findOneAndUpdate({ _id: reviewId }, data, { new: true })
