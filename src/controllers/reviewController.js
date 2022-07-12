@@ -7,16 +7,18 @@ const createReview = async function (req, res) {
     let body = req.body
     const newbookId = req.params.bookId
 
+    if(!Validator.isValidObjectId(newbookId))  return res.status(400).send({ status: false, message: "Enter valid bookId" })
+
     if (!Validator.isValidBody(body)) return res.status(400).send({ status: false, message: "Please enter details" })
   
     let uniqueBookId = await bookModel.findOne({ _id: newbookId, isDeleted: false })
-    if (!uniqueBookId) return res.status(400).send({ status: false, message: "Book is not present" })
+    if (!uniqueBookId) return res.status(404).send({ status: false, message: "Book is not present" })
 
     if (!body.reviewedBy) { body.reviewedBy = "Guest" }
     if (!Validator.isValid(body.reviewedBy)) return res.status(400).send({ status: false, message: "Please enter a valid name" })
 
     if (!body.rating) return res.status(400).send({ status: false, message: "Please enter rating" })
-    if (!/[0-5]/.test(body.rating)) return res.status(400).send({ status: false, message: "Please enter valid rating" })
+    if (!/[0-5]/.test(body.rating)) return res.status(400).send({ status: false, message: "Please enter valid rating (1-5)" })
 
     if (body.review) {
       if (!Validator.isValid(body.review)) return res.status(400).send({ status: false, message: "Please enter valid review" })
@@ -64,12 +66,12 @@ const updateReview = async function (req, res) {
     if (!Validator.isValidObjectId(bookId)) return res.status(400).send({ status: false, message: "userId is not valid" })
 
     let eBook = await bookModel.findOne({ _id: bookId, isDeleted: false })
-    if (!eBook) { return res.status(400).send({ status: false, message: "book doesn't exist" }) }
+    if (!eBook) { return res.status(404).send({ status: false, message: "book doesn't exist" }) }
     let reviewId = req.params.reviewId
     if (!Validator.isValidObjectId(reviewId)) return res.status(400).send({ status: false, message: "reviewId is not valid" })
 
     let eReview = await reviewModel.findOne({ _id: reviewId , isDeleted:false })
-    if (!eReview) { return res.status(400).send({ status: false, message: "Review doesn't exist" }) }
+    if (!eReview) { return res.status(404).send({ status: false, message: "Review doesn't exist" }) }
 
     if (review) {
       if (!Validator.isValid(review)) { return res.status(400).send({ status: false, message: "enter something in review" }) }
@@ -106,10 +108,10 @@ const deleteReview = async function (req, res) {
     if (!Validator.isValidObjectId(bookId)) { return res.status(400).send({ status: false, message: "please enter Valid bookId" }) }
 
     const validBook = await bookModel.findOne({ _id: bookId, isDeleted: false })
-    if (!validBook) { return res.status(400).send({status: false, message: "please enter Valid Id" }) }
+    if (!validBook) { return res.status(404).send({status: false, message: "bookId does not exist" }) }
 
-    const validReviewId = await reviewModel.findOne({ _id: reviewId, isDeleted: true })
-    if (validReviewId) { return res.status(400).send({status: false, message: "review does not exist" }) }
+    const validReviewId = await reviewModel.findOne({ _id: reviewId, isDeleted: false })
+    if (!validReviewId) { return res.status(404).send({status: false, message: "review does not exist" }) }
 
     if (bookId != validReviewId.bookId) { return res.status(400).send({ status: false, message: "this review is not for this book" }) }
 
