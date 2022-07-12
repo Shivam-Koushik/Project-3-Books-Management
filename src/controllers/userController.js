@@ -38,7 +38,6 @@ const register = async function (req, res) {
       if (!Validator.isValidBody(address)) return res.status(400).send({ status: false, message: "Provide your address" })
       if (!Validator.isValid(address.street)) return res.status(400).send({ status: false, message: "Provide valid street" })
       if (!Validator.isValid(address.city)) return res.status(400).send({ status: false, message: "Provide valid city" })
-
       if (!(/^[1-9][0-9]{5}$/.test(address.pincode))) return res.status(400).send({ status: false, message: "Provide valid pincode" })
     }
 
@@ -64,20 +63,26 @@ const login = async function (req, res) {
     if (!password) return res.status(400).send({ status: false, message: "Please enter password" })
     if (!Validator.isValidPassword(password)) return res.status(400).send({ status: false, message: "Use strong password ,  At least one upper case letter , lower case , number and special character , min length Eight and max length Fifteen" })
 
-    const user = await userModel.findOne({ $and: [{ email: email }, { password: password }] })
-    if (!user) return res.status(400).send({ status: false, message: "enter correct email or password" })
+    const userEmail = await userModel.findOne({ email: email })
+    if (!userEmail) return res.status(400).send({ status: false, message: "Email does not exist" })
+    const userPassword = await userModel.findOne({ password: password })
+    if (!userPassword) return res.status(400).send({ status: false, message: "Password does not exist" })
+
 
     let token = jwt.sign({
 
-      userId: user._id.toString(),
-      email: user.email,
-      password: user.password
+      userId: userEmail._id.toString(),
+      email: userEmail.email,
+      password: userPassword.password,
+      at: Math.floor(Date.now() / 1000),                //issued date
+      exp: Math.floor(Date.now() / 1000) + 24 * 60 * 60  //expires in 24 hr 24 represent this
+
     },
-      "project_3", { expiresIn:'24h' }
+      "project_3"
     );
 
     res.status(200).setHeader("x-api-key", token);
-    res.status(200).send({ status: true, message: 'Success', data: token });
+    res.status(200).send({ status: true, message: 'Success', data: {token} });
 
   }
   catch (err) {

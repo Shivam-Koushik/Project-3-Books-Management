@@ -9,7 +9,7 @@ const bookSchema = new mongoose.Schema({
     category: { type: String, required: true },
     subcategory: { type: [String], required: true }, // <====== array of string
     reviews: { type: Number, default: 0 },
-    deletedAt: { type: Date, default: Date.now },
+    deletedAt: { type: Date, default:null },
     isDeleted: { type: Boolean, default: false },
     releasedAt: { type: Date, required: true }
 }, { timestamps: true })
