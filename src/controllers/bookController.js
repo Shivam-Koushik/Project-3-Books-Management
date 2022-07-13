@@ -21,7 +21,7 @@ const postBooks = async function (req, res) {
     if (!Validator.isValid(excerpt)) return res.status(400).send({ status: false, message: "Provide valid excerpt" })
 
     if (!userId) return res.status(400).send({ status: false, message: "please enter userId" })
-    // if (!ObjectId.isValid(userId)) return res.status(400).send({ status: false, message: "please enter valid userId" })
+    if (!Validator.isValidObjectId(userId)) return res.status(400).send({ status: false, message: "please enter valid userId" })
 
     if (!ISBN) return res.status(400).send({ status: false, message: "please enter ISBN" })
     if (ISBN.length !== 13) return res.status(400).send({ status: false, message: "Provide valid ISBN" })

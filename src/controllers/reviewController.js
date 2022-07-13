@@ -78,7 +78,7 @@ const updateReview = async function (req, res) {
     }
 
     if (rating) {
-      if (!/[0-5]/.test(body.rating)) { return res.status(400).send({ status: false, message: "use numbers only for rating (0-5)" }) }
+      if (!/[0-5]/.test(rating)) { return res.status(400).send({ status: false, message: "use numbers only for rating (0-5)" }) }
     }
 
     if (reviewedBy) {
