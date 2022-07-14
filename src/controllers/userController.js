@@ -68,7 +68,6 @@ const login = async function (req, res) {
     const userPassword = await userModel.findOne({ password: password })
     if (!userPassword) return res.status(400).send({ status: false, message: "Password does not exist" })
 
-
     let token = jwt.sign({
 
       userId: userEmail._id.toString(),

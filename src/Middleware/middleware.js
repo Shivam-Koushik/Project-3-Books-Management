@@ -9,7 +9,6 @@ const Authenticate = function (req, res, next) {
 
         jwt.verify(token, "project_3",function(err,decodedToken){
             if(err)  return res.status(401).send({ status: false, msg: "token is not valid" });
-
             req.newUser = decodedToken.userId 
         });
         next()

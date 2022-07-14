@@ -1,8 +1,9 @@
 const express = require('express');
-const router = express.Router();
+const router = express.Router(); 
 const userController = require('../controllers/userController')
 const bookController = require('../controllers/bookController')
 const reviewController = require('../controllers/reviewController')
+const awsS3Controller = require('../controllers/awsS3Controller')
 const middleware = require('../Middleware/middleware')
 
 router.post('/register',userController.register)
@@ -15,5 +16,6 @@ router.delete('/books/:bookId',middleware.Authenticate,middleware.Authorisation,
 router.post('/books/:bookId/review',middleware.Authenticate, reviewController.createReview)
 router.put('/books/:bookId/review/:reviewId',middleware.Authenticate, reviewController.updateReview)
 router.delete('/books/:bookId/review/:reviewId',middleware.Authenticate, reviewController.deleteReview)
+router.post("/write-file-aws", awsS3Controller.uploadData)
 
 module.exports = router;

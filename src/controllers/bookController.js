@@ -146,7 +146,7 @@ const updateBooksByBookId = async function (req, res) {
       { title: title, excerpt: excerpt, releasedAt: releasedAt, ISBN: ISBN }, { new: true });
     if (!updatedBook) { return res.status(404).send({ status: false, message: "book does not exist" }) }
 
-    res.status(200).send({ status: true, message: "success", data: updatedBook })
+   return res.status(200).send({ status: true, message: "success", data: updatedBook })
 
   } catch (err) {
     return res.status(500).send({ status: false, message: err.message })
