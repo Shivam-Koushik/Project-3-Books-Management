@@ -1,5 +1,5 @@
 {
-  "name": "src",
+  "name": "books-management",
   "version": "1.0.0",
   "description": "Backend cohort for Thorium(feb-May)",
   "main": "index.js",
